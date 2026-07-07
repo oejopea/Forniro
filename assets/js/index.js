@@ -1,21 +1,31 @@
 const slider = document.getElementById("slider");
-  const images = slider.children.length;
-  let index = 0;
+const slides = document.querySelectorAll(".slide");
+let index = 0;
 
-  document.getElementById("next").addEventListener("click", () => {
-    if (index < images - 1) {
-      index++;
+// دالة لتحديث حجم الصور
+function updateSlides() {
+  slides.forEach((slide, i) => {
+    if (i === index) {
+      slide.classList.add("scale-110"); // تكبير الصورة الحالية
+      slide.classList.remove("opacity-70"); 
     } else {
-      index = 0;
+      slide.classList.remove("scale-110");
+      slide.classList.add("opacity-70"); // باقي الصور تكون عادية
     }
-    slider.style.transform = `translateX(-${index * 100}%)`;
   });
+}
 
-  document.getElementById("prev").addEventListener("click", () => {
-    if (index > 0) {
-      index--;
-    } else {
-      index = images - 1;
-    }
-    slider.style.transform = `translateX(-${index * 100}%)`;
-  });
+// أول تحديث عند التحميل
+updateSlides();
+
+document.getElementById("next").addEventListener("click", () => {
+  index = (index + 1) % slides.length;
+  slider.style.transform = `translateX(-${index * 100}%)`;
+  updateSlides();
+});
+
+document.getElementById("prev").addEventListener("click", () => {
+  index = (index - 1 + slides.length) % slides.length;
+  slider.style.transform = `translateX(-${index * 100}%)`;
+  updateSlides();
+});
